@@ -48,7 +48,37 @@ describe('BlogAPI', function() {
         res.should.be.json;
         res.body.should.be.a('object');
         res.body.should.include.keys('id','title','author');
+      });
+  });
+
+  // test Put endpoint
+  it('should modify a record on PUT', function() {
+    // Create record edits - get id from get
+    const recordToUpdate = {title: 'test title', content: 'test content', author: 'test author'};
+    return chai.request(app)
+      .get('/blog-posts')
+      .then(function(res){
+        recordToUpdate.id = res.body[0].id;
+        return chai.request(app)
+          .put(`/blog-posts/${recordToUpdate.id}`)
+          .send(recordToUpdate)
       })
-      
-  })
+      .then(function(res) {
+        res.should.have.status(204);
+      });
+  });
+
+  // test DELETE endpoint
+  it('should delete record', function() {
+    // get id
+    return chai.request(app)
+      .get('/blog-posts')
+      .then(function(res) {
+        return chai.request(app)
+          .delete(`/blog-posts/${res.body[0].id}`);
+      })
+      .then(function(res) {
+        res.should.have.status(204);
+      });
+  });
 })
