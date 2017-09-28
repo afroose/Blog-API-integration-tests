@@ -1,2 +1,9 @@
 language: node_js
 node_js: node
+deploy:
+  provider: heroku
+  api_key:
+    secure: b98505ec-78c8-4480-b0f8-fbaa5f1bf062
+  app: sheltered-tundra-33241
+  on:
+    repo: afroose/Blog-API-integration-tests
