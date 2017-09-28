@@ -25,6 +25,30 @@ describe('BlogAPI', function() {
       .get('/blog-posts')
       .then(function(res){
         res.should.have.status(200);
+        res.should.be.json;
+        res.body.length.should.be.at.least(1);
+        // check keys
+        const expectedKeys = ['id', 'title', 'content', 'author'];
+        res.body.forEach(function(item) {
+          item.should.be.a('object');
+          item.should.include.keys(expectedKeys);
+        });
       });
   });
+
+  // test POST endpoint
+  it('should add a new blog', function() {
+    // create blog
+    const newBlog = {title: 'test title', content: 'test content', author: 'test author'};
+    return chai.request(app)
+      .post('/blog-posts')
+      .send(newBlog)
+      .then(function(res) {
+        res.should.have.status(201);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.include.keys('id','title','author');
+      })
+      
+  })
 })
